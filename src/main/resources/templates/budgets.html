@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budżety</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Budżety</h1>
+
+    <div th:if="${budgets.isEmpty()}">
+        <p>Nie posiadasz żadnego budżetu. <a th:href="@{/create-budget}">Stwórz nowy budżet</a></p>
+    </div>
+
+    <div class="row" th:unless="${budgets.isEmpty()}">
+        <div class="col">
+            <h2>Twoje budżety</h2>
+            <ul class="list-group">
+                <li th:each="budget : ${budgets}" class="list-group-item">
+                    <a th:href="@{/budget/{id}(id=${budget.id})}" th:text="${budget.name}">Nazwa budżetu</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

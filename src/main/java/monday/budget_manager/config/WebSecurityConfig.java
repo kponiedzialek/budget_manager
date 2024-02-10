@@ -31,7 +31,8 @@ public class WebSecurityConfig {
         .csrf(
             csrf ->
                 csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
-        .formLogin(login -> login.loginPage("/login").permitAll())
+        .formLogin(
+            login -> login.loginPage("/login").permitAll().defaultSuccessUrl("/budgets", true))
         .logout(LogoutConfigurer::permitAll);
 
     return httpSecurity.build();
