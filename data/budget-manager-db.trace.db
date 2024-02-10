@@ -166,3 +166,6 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Kamil/D
 2024-02-10 00:12:49.726699+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: Obiekt jest zamknięty
 The object is already closed [90007-224]
+2024-02-10 15:51:10.627773+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: Obiekt jest zamknięty
+The object is already closed [90007-224]

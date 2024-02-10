@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Strona główna</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
-<h1>Witamy w Budget Manager!</h1>
-<a th:href="@{/budgets}">Twoje budżety</a>
+<div th:replace="~{base :: base(title='Strona główna', content=~{::section})}">
+    <section th:fragment="content">
+        <h1 class="text-center">Witaj w Menadżerze Budżetów!</h1>
+        <p class="text-center">Jest to prosta aplikacja do zarządzania budżetami,
+            w której możesz dodawać na bieżąco swoje
+            transakcje oraz
+            wyświetlać podsumowanie budżetu</p>
+    </section>
+</div>
 </body>
 </html>
