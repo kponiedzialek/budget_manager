@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj nową transakcję</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{base :: base(title='Dodaj nową transakcję', content=~{::section})}">
+    <section th:fragment="content">
+        <div class="container">
+            <h1>Dodaj nową transakcję do budżetu: </h1>
+
+            <form th:action="@{/budget/{budgetId}/add-transaction(budgetId=${budget.id})}" th:object="${transaction}" method="post">
+                <div class="form-group">
+                    <label for="description">Opis</label>
+                    <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Opis transakcji" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Kwota</label>
+                    <input type="number" id="amount" th:field="*{amount}" class="form-control" placeholder="Kwota" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Data</label>
+                    <input type="date" id="date" th:field="*{date}" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Typ</label>
+                    <div>
+                        <input type="radio" id="expense" th:field="*{isExpense}" value="true">
+                        <label for="expense">Wydatek</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="revenue" th:field="*{isExpense}" value="false">
+                        <label for="revenue">Przychód</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Dodaj transakcję</button>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+</html>

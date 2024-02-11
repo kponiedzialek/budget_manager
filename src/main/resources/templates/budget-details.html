@@ -2,53 +2,76 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Szczegóły Budżetu</title>
+    <title>Szczegóły budżetu</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .expense {
+            background-color: #ffcccc;
+        }
+
+        .revenue {
+            background-color: #ccffcc;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/0b0fc9f078.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="container">
-    <h1>Szczegóły budżetu: <span th:text="${budget.name}">Nazwa Budżetu</span></h1>
+<div th:replace="~{base :: base(title='Szczegóły budżetu', content=~{::section})}">
+    <section th:fragment="content">
+        <div class="container">
+            <h1>Szczegóły budżetu: <span th:text="${budget.name}">Nazwa Budżetu</span></h1>
 
-    <div>
-        <h2>Podsumowanie</h2>
-        <p>Saldo: <span th:text="${budget.balance}">0.00</span> zł</p>
-        <p>Całkowite przychody: <span th:text="${budget.totalRevenues}">0.00</span> zł</p>
-        <p>Całkowite wydatki: <span th:text="${budget.totalExpenses}">0.00</span> zł</p>
-    </div>
+            <div>
+                <h2>Podsumowanie</h2>
+                <p>Saldo: <span th:text="${budget.balance}">0.00</span> zł</p>
+                <p>Całkowite przychody: <span th:text="${budget.totalRevenues}">0.00</span> zł</p>
+                <p>Całkowite wydatki: <span th:text="${budget.totalExpenses}">0.00</span> zł</p>
+            </div>
 
-    <div>
-        <h2>Transakcje</h2>
-        <div th:if="${budget.transactions != null and !budget.transactions.isEmpty()}">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Opis</th>
-                    <th>Kwota</th>
-                    <th>Data</th>
-                    <th>Typ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="transaction : ${budget.transactions}">
-                    <td th:text="${transaction.description}">Opis transakcji</td>
-                    <td th:text="${transaction.amount}">100.00</td>
-                    <td th:text="${transaction.date}">2024-01-01</td>
-                    <td th:text="${transaction.isExpense ? 'Wydatek' : 'Przychód'}">Typ</td>
-                </tr>
-                </tbody>
-            </table>
+            <div>
+                <h2>Transakcje</h2>
+                <div th:if="${budget.transactions != null and !budget.transactions.isEmpty()}">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Opis</th>
+                            <th>Kwota</th>
+                            <th>Data</th>
+                            <th>Typ</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="transaction : ${budget.transactions}"
+                            th:classappend="${transaction.isExpense ? 'expense' : 'revenue'}">
+                            <td th:text="${transaction.description}">Opis transakcji</td>
+                            <td th:text="${transaction.amount}">100.00</td>
+                            <td th:text="${transaction.date}">2024-01-01</td>
+                            <td th:text="${transaction.isExpense ? 'Wydatek' : 'Przychód'}">Typ</td>
+                            <td>
+                                <form th:action="@{/budget/{budgetId}/transaction/{id}/delete(budgetId=${budget.id}, id=${transaction.id})}" method="post"
+                                      style="display: inline-block;">
+                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="${budget.transactions != null and !budget.transactions.isEmpty()}">
+                    <p>Brak transakcji.</p>
+                </div>
+            </div>
+
+            <div>
+                <a th:href="@{/budget/{budgetId}/add-transaction(budgetId=${budget.id})}" class="btn btn-primary">Dodaj
+                    transakcję</a>
+            </div>
         </div>
-        <div th:unless="${budget.transactions != null and !budget.transactions.isEmpty()}">
-            <p>Brak transakcji.</p>
-        </div>
-    </div>
-
-    <div>
-        <a th:href="@{/add-transaction(budgetId=${budget.id})}" class="btn btn-primary">Dodaj Transakcję</a>
-    </div>
+    </section>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

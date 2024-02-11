@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,15 +24,16 @@ public class WebSecurityConfig {
                     .permitAll()
                     .requestMatchers("/register")
                     .permitAll()
+                    .requestMatchers("/")
+                    .permitAll()
                     .anyRequest()
                     .authenticated())
         .headers(AbstractHttpConfigurer::disable)
         .csrf(
             csrf ->
                 csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
-        .formLogin(
-            login -> login.loginPage("/login").permitAll().defaultSuccessUrl("/budgets", true))
-        .logout(LogoutConfigurer::permitAll);
+        .formLogin(login -> login.loginPage("/login").permitAll().defaultSuccessUrl("/", true))
+        .logout(logout -> logout.permitAll().logoutSuccessUrl("/"));
 
     return httpSecurity.build();
   }

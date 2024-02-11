@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,13 +22,10 @@ public class Transaction {
   private BigDecimal amount;
 
   @Column(nullable = false)
-  private Instant date;
+  private LocalDate date;
 
   @Column(nullable = false)
-  private boolean isExpense;
-
-  @Column(nullable = false)
-  private String category;
+  private Boolean isExpense;
 
   @ManyToOne
   @JoinColumn(name = "budget_id", nullable = false)

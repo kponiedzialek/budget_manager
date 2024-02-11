@@ -2,22 +2,22 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Stwórz Budżet</title>
+    <title>Stwórz budżet</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div th:replace="~{base :: base(title='Strona główna', content=~{::section})}">
+<div th:replace="~{base :: base(title='Stwórz budżet', content=~{::section})}">
     <section th:fragment="content">
         <div class="container">
-            <h1>Stwórz nowy Budżet</h1>
+            <h1>Stwórz nowy budżet</h1>
 
             <form action="#" th:action="@{/create-budget}" th:object="${budget}" method="post">
                 <div class="form-group">
-                    <label for="name">Nazwa Budżetu:</label>
+                    <label for="name">Nazwa budżetu:</label>
                     <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Nazwa">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Stwórz Budżet</button>
+                <button type="submit" class="btn btn-primary">Stwórz budżet</button>
             </form>
         </div>
     </section>

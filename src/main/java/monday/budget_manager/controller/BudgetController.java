@@ -6,10 +6,7 @@ import monday.budget_manager.model.Budget;
 import monday.budget_manager.service.BudgetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class BudgetController {
     return "budgets";
   }
 
-  @GetMapping("create-budget")
+  @GetMapping("/create-budget")
   public String createBudgetForm(Model model) {
     model.addAttribute("budget", new Budget());
     return "create-budget";
@@ -41,5 +38,20 @@ public class BudgetController {
 
     model.addAttribute("budget", budget);
     return "budget-details";
+  }
+
+  @PostMapping("/budget/{id}/edit")
+  public String editBudget(@PathVariable("id") Long id, @RequestParam String name) {
+    // TODO: Dorobić DTO
+    budgetService.editBudget(id, name);
+
+    return "redirect:/budgets";
+  }
+
+  @PostMapping("/budget/{id}/delete")
+  public String deleteBudget(@PathVariable("id") Long id) {
+    budgetService.deleteBudget(id);
+
+    return "redirect:/budgets";
   }
 }

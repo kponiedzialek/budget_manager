@@ -4,30 +4,73 @@
     <meta charset="UTF-8">
     <title>Budżety</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/0b0fc9f078.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<div th:replace="~{base :: base(title='Strona główna', content=~{::section})}">
+<div th:replace="~{base :: base(title='Budżety', content=~{::section})}">
     <section th:fragment="content">
         <div class="container">
             <h1>Budżety</h1>
-
             <div th:if="${budgets.isEmpty()}">
-                <p>Nie posiadasz żadnego budżetu. <a th:href="@{/create-budget}">Stwórz nowy budżet</a></p>
+                <p>Nie posiadasz żadnego budżetu.<br><br><br><a th:href="@{/create-budget}" class="btn btn-primary">Stwórz
+                    nowy budżet</a></p>
             </div>
-
-            <div class="row" th:unless="${budgets.isEmpty()}">
-                <div class="col">
-                    <ul class="list-group">
-                        <li th:each="budget : ${budgets}" class="list-group-item">
-                            <a th:href="@{/budget/{id}(id=${budget.id})}" th:text="${budget.name}">Nazwa budżetu</a>
-                        </li>
-                    </ul>
-                    <br>
-                    <a th:href="@{/create-budget}" class="btn btn-primary">Stwórz nowy budżet</a>
-                </div>
+            <ul class="list-group" th:unless="${budgets.isEmpty()}" id="budgetList">
+                <li th:each="budget : ${budgets}" class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a th:href="@{/budget/{id}(id=${budget.id})}" th:text="${budget.name}">Nazwa budżetu</a>
+                        <div>
+                            <!-- TODO: Naprawić edycję budżetu -->
+                            <!-- <button class="btn btn-sm btn-primary edit-button" data-id="${budget.id}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button> -->
+                            <form th:action="@{/budget/{id}/delete(id=${budget.id})}" method="post"
+                                  style="display: inline-block;">
+                                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="mt-3" th:unless="${budgets.isEmpty()}">
+                <a th:href="@{/create-budget}" class="btn btn-primary">Stwórz nowy budżet</a>
             </div>
         </div>
     </section>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const budgetId = this.getAttribute('data-id');
+                editBudget(budgetId);
+            });
+        });
+    });
+
+    function editBudget(budgetId) {
+        const budgetNameElementId = `budgetName_${budgetId}`;
+        const budgetNameElement = document.getElementById(budgetNameElementId);
+        if (budgetNameElement) {
+            const currentName = budgetNameElement.textContent;
+            budgetNameElement.innerHTML = `
+            <form action="/budget/${budgetId}/edit" method="post">
+                <input type="text" name="name" value="${currentName}" class="form-control"/>
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
+                <button type="button" onclick="cancelEdit(${budgetId}, '${currentName}')" class="btn btn-secondary"><i class="fas fa-times"></i></button>
+            </form>
+        `;
+        }
+    }
+
+    function cancelEdit(budgetId, originalName) {
+        const budgetNameElement = document.getElementById(`budgetName_${budgetId}`);
+        budgetNameElement.innerHTML = originalName;
+    }
+</script>
 </body>
 </html>
